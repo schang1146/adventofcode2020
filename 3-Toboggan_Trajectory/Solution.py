@@ -18,13 +18,16 @@ def countTreesEncountered(x, y, terrain):
     # +y => moves down
     # -y => moves up
 
+    # initialize starting point
     answer = 0
     xCurr = 0
     yCurr = 0
 
+    # iterate through terrain array and count number of times '#' comes up
     while yCurr < len(terrain):
         if terrain[yCurr][xCurr] == '#':
             answer += 1
+        # updated coordinates
         xCurr = (xCurr + x) % len(terrain[0])
         yCurr = yCurr + y
 

@@ -8,7 +8,11 @@ lines = file.readlines()
 for line in lines:
     data.append(line)
 
-def solution(tickets):
+# function to get highest seat id on a boarding pass
+# returns highest seat id
+# time complexity: O(n)
+# space complexity: O(1)
+def getHighestSeatId(tickets):
     highestId = 0
     for ticket in tickets:
         parsedTicket = parseTicket(ticket)
@@ -16,26 +20,11 @@ def solution(tickets):
             highestId = parsedTicket
     return highestId
 
-def parseTicket(ticket):
-    low = 0
-    high = 127
-    for char in ticket[:7]:
-        if char == 'F':     # lower half
-            high = (low + high + 1) // 2
-        elif char == 'B':   # upper half
-            low = (low + high + 1) // 2
-
-    l = 0
-    h = 7
-    for char in ticket[7:]:
-        if char == 'L':     # lower half
-            h = (l + h + 1) // 2
-        elif char == 'R':   # upper half
-            l = (l + h + 1) // 2
-
-    return low * 8 + l
-
-def solution2(tickets):
+# function to get your seat id, there are an unknown # of seats that do not exist from beginning and end of the plane
+# returns your seat id
+# time complexity: O(1)
+# space complexity: O(1)
+def getYourSeatId(tickets):
     seen = set()
     highest = -1
     lowest = -1
@@ -51,10 +40,41 @@ def solution2(tickets):
         if id not in seen:
             return id
 
-print(parseTicket('FBFBBFFRLR'))
+# function to parse seat id on a boarding pass
+# returns seat id
+# time complexity: O(1)
+# space complexity: O(1)
+def parseTicket(ticket):
+    # tickets are always the same length
+    # the first 8 characters specifies row #
+    # the last 3 characters specifies col #
 
-print(f"Part 1 Solution: {solution(data)}")
+    # there are 128 rows numbered from 0 thru 127
+    # 'F' -> take the lower half
+    # 'B' -> take the upper half
+    rowLow = 0
+    rowHigh = 127
+    for char in ticket[:7]:
+        if char == 'F':     # lower half
+            rowHigh = (rowLow + rowHigh + 1) // 2
+        elif char == 'B':   # upper half
+            rowLow = (rowLow + rowHigh + 1) // 2
 
+    # there are 8 columns numbered from 0 thru 7
+    # 'L' -> take the lower half
+    # 'R' -> take the upper half
+    colLow = 0
+    colHigh = 7
+    for char in ticket[7:]:
+        if char == 'L':     # lower half
+            colHigh = (colLow + colHigh + 1) // 2
+        elif char == 'R':   # upper half
+            colLow = (colLow + colHigh + 1) // 2
 
+    # rowLow == rowHigh and colLow == colHigh
+    # seatId = row * 8 + col
+    return rowLow * 8 + colLow
 
-print(f"Part 2 Solution: {solution2(data)}")
+print(f"Part 1 Solution: {getHighestSeatId(data)}")
+
+print(f"Part 2 Solution: {getYourSeatId(data)}")

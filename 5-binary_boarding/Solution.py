@@ -22,7 +22,7 @@ def getHighestSeatId(tickets):
 
 # function to get your seat id, there are an unknown # of seats that do not exist from beginning and end of the plane
 # returns your seat id
-# time complexity: O(1)
+# time complexity: O(n)
 # space complexity: O(1)
 def getYourSeatId(tickets):
     seen = set()

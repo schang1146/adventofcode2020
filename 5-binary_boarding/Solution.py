@@ -22,9 +22,10 @@ def getHighestSeatId(tickets):
 
 # function to get your seat id, there are an unknown # of seats that do not exist from beginning and end of the plane
 # returns your seat id
-# time complexity: O(n)
-# space complexity: O(1)
 def getYourSeatId(tickets):
+    # Method 1:
+    # time complexity: O(n)
+    # space complexity: O(1)
     seen = set()
     highest = -1
     lowest = -1
@@ -39,6 +40,15 @@ def getYourSeatId(tickets):
     for id in range(lowest, highest + 1):
         if id not in seen:
             return id
+    
+    # Method 2:
+    # time complexity: O(n logn)
+    # space complexity: O(1)
+    # parsedTickets = [parseTicket(ticket) for ticket in tickets]
+    # parsedTickets.sort()
+    # for idx in range(len(tickets)):
+    #     if parsedTickets[idx] - idx != parsedTickets[0]:
+    #         return parsedTickets[0] + idx
 
 # function to parse seat id on a boarding pass
 # returns seat id

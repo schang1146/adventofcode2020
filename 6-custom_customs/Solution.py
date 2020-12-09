@@ -9,8 +9,8 @@ for line in lines:
     data.append(line)
 
 # function to returns total # of unique answers people said yes to in each group
-# time complexity: 
-# space complexity: 
+# time complexity: TODO
+# space complexity: TODO
 def getUniqueCountPerGroup(responses):
     seen = set()
     uniqueCount = 0
@@ -32,8 +32,8 @@ def getUniqueCountPerGroup(responses):
     return uniqueCount
 
 # function that returns total # of unique answers everyone in each group said yes to
-# time complexity:
-# space complexity:
+# time complexity: TODO
+# space complexity: TODO
 def solution2(responses):
     seen = {}
     uniqueCount = 0

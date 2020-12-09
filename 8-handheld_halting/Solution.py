@@ -8,7 +8,10 @@ lines = file.readlines()
 for line in lines:
     data.append(line.strip())
 
-def solution(instructions):
+# function to run through instructions and exits either if it hits the end or repeats
+# time complexity: O(n)
+# space complexity: O(n)
+def runProgramExitOnRepeat(instructions):
     seen = set()
     accumulator = 0
     processCounter = 0
@@ -36,13 +39,20 @@ def solution(instructions):
 
     return accumulator
 
-def solution2(instructions):
+# function to find and fix an instruction (either NOP or JMP) and return
+# the fixed program's output
+# time complexity: O(n^2) TODO: double check later on
+# space complexity: O(n) TODO: double check later on
+def fixProgramAndRun(instructions):
+    # find all possible indices to be swapped
     toSwap = []
     for idx in range(len(instructions)):
         if instructions[idx].split(' ')[0] == 'nop':
             toSwap.append((idx, 'nop'))
         elif instructions[idx].split(' ')[0] == 'jmp':
             toSwap.append((idx, 'jmp'))
+
+    # check each index found and see if it runs to the end of the instructions
     for swapInfo in toSwap:
         idx, normalInstruction = swapInfo
         endedEarly = False
@@ -86,7 +96,9 @@ def solution2(instructions):
         if not endedEarly:
             return accumulator
 
-    return 'not possible'
+    # if instructions always ends early, return -1
+    return -1
 
-print(f'Part 1 Solution: {solution(data)}')
-print(f'Part 2 Solution: {solution2(data)}')
+print(f'Part 1 Solution: {runProgramExitOnRepeat(data)}')
+
+print(f'Part 2 Solution: {fixProgramAndRun(data)}')

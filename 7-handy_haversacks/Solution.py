@@ -8,7 +8,10 @@ lines = file.readlines()
 for line in lines:
     data.append(line)
 
-#
+# function that parses the input data and returns a set of containers
+# and a hashmap of the rules
+# time complexity: O(v + e) where v == # of vertices and e = # of edges
+# space complexity: O(v)
 def parseData(data):
     containers = set()
     rules = {}
@@ -29,7 +32,10 @@ def parseData(data):
 
 containers, rules = parseData(data)
 
-def dfs(rules):
+# function returns the total number of bags that can contain a shiny gold bag
+# time complexity: O(v + e) where v == # of vertices and e = # of edges
+# space complexity: O(v)
+def totalBagsCanContainShinyGoldBag(rules):
     seen = set()
     stack = [[color] for color in rules.keys()]
     canContainGold = set()
@@ -51,22 +57,26 @@ def dfs(rules):
                     for history in currentPath:
                         canContainGold.add(history)
 
-    return canContainGold
+    return len(canContainGold)
 
-def totalBags(rules):
-    total = 0
+# function returns the total # of bags inside the a shiny gold bag if
+# the rules passed in described the # of bags inside each other bag
+# time complexity: O(v + e) where v == # of vertices and e = # of edges
+# space complexity: O(v)
+def totalBagsInShinyGoldBag(rules):
+    totalBags = 0
     stack = [('shiny gold', 1)]
     while len(stack) > 0:
         currentColor, currentMultiplier = stack.pop()
 
         for color in rules[currentColor].keys():
-            total += rules[currentColor][color] * currentMultiplier
+            totalBags += rules[currentColor][color] * currentMultiplier
             stack.append((color, currentMultiplier * rules[currentColor][color]))
 
-    return total
+    return totalBags
 
 
 
-# print(len(dfs(rules)))
+print(f"Part 1 Solution: {totalBagsCanContainShinyGoldBag(rules)}")
 
-print(totalBags(rules))
+print(f"Part 2 Solution: {totalBagsInShinyGoldBag(rules)}")

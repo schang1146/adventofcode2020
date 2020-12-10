@@ -70,10 +70,12 @@ def getTotalPossArrangements(data):
 
     return seen[0]
 
-print(f'Sample 1 Part 1 Solution: {get1JoltDiffTimes3JoltDiff(example1)} should be 35')
-print(f'Sample 2 Part 1 Solution: {get1JoltDiffTimes3JoltDiff(example2)} should be 220')
-print(f'Part 1 Solution: {get1JoltDiffTimes3JoltDiff(data)}')
+if __name__ == "__main__":
 
-print(f'Sample 1 Part 2 Solution: {getTotalPossArrangements(example1)} should be 8')
-print(f'Sample 2 Part 2 Solution: {getTotalPossArrangements(example2)} should be 19208')
-print(f'Part 2 Solution: {getTotalPossArrangements(data)}')
+    print(f'Sample 1 Part 1 Solution: {get1JoltDiffTimes3JoltDiff(example1)} should be 35')
+    print(f'Sample 2 Part 1 Solution: {get1JoltDiffTimes3JoltDiff(example2)} should be 220')
+    print(f'Part 1 Solution: {get1JoltDiffTimes3JoltDiff(data)}')
+    print()
+    print(f'Sample 1 Part 2 Solution: {getTotalPossArrangements(example1)} should be 8')
+    print(f'Sample 2 Part 2 Solution: {getTotalPossArrangements(example2)} should be 19208')
+    print(f'Part 2 Solution: {getTotalPossArrangements(data)}')

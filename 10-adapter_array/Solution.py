@@ -1,12 +1,26 @@
 # initialize problem variables
 data = []
+example1 = []
+example2 = []
+
+# populate sample data from example file(s)
+filename = 'example1.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example1.append(int(line.strip()))
+filename = 'example2.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example2.append(int(line.strip()))
 
 # populate data from input file
 filename = 'input.txt'
-file = open(filename, 'r')
-lines = file.readlines()
-for line in lines:
-    data.append(int(line.strip()))
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        data.append(int(line.strip()))
 
 # function to return the # of 1-jolt differences multiplied by the
 # # of 3-jolt differences
@@ -56,6 +70,10 @@ def getTotalPossArrangements(data):
 
     return seen[0]
 
+print(f'Sample 1 Part 1 Solution: {get1JoltDiffTimes3JoltDiff(example1)} should be 35')
+print(f'Sample 2 Part 1 Solution: {get1JoltDiffTimes3JoltDiff(example2)} should be 220')
 print(f'Part 1 Solution: {get1JoltDiffTimes3JoltDiff(data)}')
 
+print(f'Sample 1 Part 2 Solution: {getTotalPossArrangements(example1)} should be 8')
+print(f'Sample 2 Part 2 Solution: {getTotalPossArrangements(example2)} should be 19208')
 print(f'Part 2 Solution: {getTotalPossArrangements(data)}')

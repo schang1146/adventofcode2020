@@ -12,7 +12,7 @@ for line in lines:
 # # of 3-jolt differences
 # time complexity: O(n)
 # space complexity: O(1)
-def solution1(data):
+def get1JoltDiffTimes3JoltDiff(data):
     diffCount = {}
     data.sort()
     # makes sure there's 0-jolt and max+3-jolt elements in the data array
@@ -33,7 +33,7 @@ def solution1(data):
 # connect the charging outlet 0-jolt to max+3-jolt
 # time complexity: O(n)
 # space complexity: O(1)
-def solution2(data):
+def getTotalPossArrangements(data):
     data.sort()
     # makes sure there's 0-jolt and max+3-jolt elements in the data array
     if data[0] == 0:
@@ -56,6 +56,6 @@ def solution2(data):
 
     return seen[0]
 
-print(f'Part 1 Solution: {solution1(data)}')
+print(f'Part 1 Solution: {get1JoltDiffTimes3JoltDiff(data)}')
 
-print(f'Part 2 Solution: {solution2(data)}')
+print(f'Part 2 Solution: {getTotalPossArrangements(data)}')

@@ -23,7 +23,7 @@ with open(filename, 'r') as file:
         data.append(line.strip())
 
 
-def addParenthesis(expression, op):
+def addParenthesisOld(expression, op):
     newExpression = ""
     left = ""
 
@@ -83,6 +83,62 @@ def addParenthesis(expression, op):
     return newExpression
 
 
+def addParenthesis(expression, op):
+    newExpression = ""
+    left = ""
+
+    pointer = 0
+    while pointer < len(expression):
+        if expression[pointer] == "(":
+            start = pointer
+            parenthesesLevel = 1
+            while parenthesesLevel > 0:
+                pointer += 1
+                if expression[pointer] == "(":
+                    parenthesesLevel += 1
+                elif expression[pointer] == ")":
+                    parenthesesLevel -= 1
+            left += f"({addParenthesis(expression[start+1:pointer], op)})"
+        elif expression[pointer] == "+":
+            opChanged = False
+            while not opChanged and pointer < len(expression):
+                if expression[pointer] == "(":
+                    start = pointer
+                    parenthesesLevel = 1
+                    while parenthesesLevel > 0:
+                        pointer += 1
+                        if expression[pointer] == "(":
+                            parenthesesLevel += 1
+                        elif expression[pointer] == ")":
+                            parenthesesLevel -= 1
+                    left += f"({addParenthesis(expression[start+1:pointer], op)})"
+                elif expression[pointer] == "+":
+                    left += expression[pointer]
+                elif expression[pointer] == "*":
+                    newExpression += f"({left})*"
+                    left = ""
+                    opChanged = True
+                elif expression[pointer].isdigit():
+                    left += expression[pointer]
+
+                pointer += 1
+
+            if pointer == len(expression):
+                newExpression += f"({left})"
+                left = ""
+        elif expression[pointer] == "*":
+            newExpression += f"{left}*"
+            left = ""
+        elif expression[pointer].isdigit():
+            left += expression[pointer]
+
+        pointer += 1
+
+    newExpression += left
+
+    return newExpression
+
+
 def eval(expression, opPriority=[]):
     output = 0
     currentOp = "+"
@@ -102,7 +158,7 @@ def eval(expression, opPriority=[]):
                 elif expression[pointer] == ")":
                     parenthesesLevel -= 1
             output = evalOp(output, eval(
-                expression[start+1:pointer], opPriority), currentOp)
+                expression[start+1:pointer]), currentOp)
         elif expression[pointer] == "+":
             currentOp = "+"
         elif expression[pointer] == "*":
@@ -146,8 +202,8 @@ def solution2(data):
 
 if __name__ == "__main__":
 
-    # print(f'Sample 1 Part 1 Solution: {solution1(example1)} should be 26335')
-    # print(f'Part 1 Solution: {solution1(data)}')
-    # print()
+    print(f'Sample 1 Part 1 Solution: {solution1(example1)} should be 26335')
+    print(f'Part 1 Solution: {solution1(data)}')
+    print()
     print(f'Sample 1 Part 2 Solution: {solution2(example2)} should be 693942')
-    # print(f'Part 2 Solution: {solution2(data)}')
+    print(f'Part 2 Solution: {solution2(data)}')

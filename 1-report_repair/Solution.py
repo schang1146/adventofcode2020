@@ -1,19 +1,32 @@
 # initialize problem variables
 data = []
+example_one = []
 target = 2020
+
+# populate sample data from example file(s)
+filename = 'example_one.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example_one.append(int(line.strip()))
 
 # populate data from input file
 filename = 'input.txt'
-file = open(filename, 'r')
-lines = file.readlines()
-for line in lines:
-    data.append(int(line))
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        data.append(int(line.strip()))
 
-# function to find two numbers that add up to a target number given a nums list and a target int
-# returns False if no pair could be found
-# time complexity: O(n)
-# space complexity: O(n)
-def twoSum(nums, target):
+
+def two_sum(nums, target):
+    """Find two numbers that add up to the target given a list of integers
+
+    Returns a sorted list of two numbers that add to the target
+    Returns False if no two numbers could be found
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    """
     output = False
     seen = set()
     for num in nums:
@@ -22,28 +35,50 @@ def twoSum(nums, target):
             break
         else:
             seen.add(num)
-    file.close()
     return output
 
-# print part 1 solution
-answer = 1
-for num in twoSum(data, target):
-    answer *= num
-print(f'Part 1 Solution: {answer}')
 
-# function to find three numbers that add up to a target number given a nums list and a target int
-# returns False if no triplet could be found
-# time complexity: O(n^2)
-# space complexity: O(n)
-def threeSum(nums, target):
-    output = -1
+def three_sum(nums, target):
+    """Find three numbers that add up to the target given a list of integers
+    (Uses two_sum())
+
+    Returns a sorted list of three numbers that add to the target
+    Returns False if no three numbers could be found
+
+    Time Complexity: O(n^2)
+    Space Complexity: O(n)
+    """
+    output = False
     for idx in range(len(nums)):
-        two_sum_output = twoSum(nums[:idx] + nums[idx + 1:], target - nums[idx])
+        two_sum_output = two_sum(
+            nums[:idx] + nums[idx + 1:], target - nums[idx])
         if two_sum_output:
             return two_sum_output + [nums[idx]]
+    return output
 
-# print part 2 solution
-answer = 1
-for num in threeSum(data, target):
-    answer *= num
-print(f'Part 2 Solution: {answer}')
+
+def solution1(data, target):
+    """Finds the product of the two entries in data that sum up to 2020"""
+    answer = 1
+    for num in two_sum(data, target):
+        answer *= num
+    return answer
+
+
+def solution2(data, target):
+    """Finds the product of the three entries in data that sum up to 2020"""
+    answer = 1
+    for num in three_sum(data, target):
+        answer *= num
+    return answer
+
+
+if __name__ == "__main__":
+
+    print(
+        f'Sample 1 Part 1 Solution: {solution1(example_one, target)} should be 514579')
+    print(f'Part 1 Solution: {solution1(data, target)}')
+    print()
+    print(
+        f'Sample 1 Part 2 Solution: {solution2(example_one, target)} should be 241861950')
+    print(f'Part 2 Solution: {solution2(data, target)}')

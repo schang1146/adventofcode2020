@@ -1,6 +1,7 @@
 # initialize problem variables
 data = []
-validFields = {
+example1 = []
+valid_fields = {
     'byr',  # birth year
     'iyr',  # issue year
     'eyr',  # expiration year
@@ -11,59 +12,81 @@ validFields = {
     'cid',  # country id
 }
 
+# populate sample data from example file(s)
+filename = 'example1.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example1.append(line.strip())
+
 # populate data from input file
-# time complexity: O(k + n) where k is the number of lines in the file
-# space complexity: O(n) where n is the number of passports in the file
 filename = 'input.txt'
-file = open(filename, 'r')
-lines = file.readlines()
-passport = {}
-for line in lines:
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        data.append(line.strip())
 
-    # parse current line's key/val pair into passport dictionary
-    if line != '\n':
-        for field in line.strip().split(' '):
-            key, val = field.split(':')
-            if key in validFields:
-                passport[key] = val
 
-    # if empty line, save current passport data and start a new passport
-    else:
-        data.append(passport)
-        passport = {}
-data.append(passport)
+def get_passports_from_data(data):
+    """Parse all passports from the given raw data
 
-# function to count the number of valid passports in the given file
-# returns number of valid passports
-# time complexity: O(n)
-# space complexity: O(1)
-def numValidPassports(passports, validationRequired = False, relevantFields = validFields):
-    output = 0
-    for passport in passports:
-        numValidated = 0
+    Returns a list of passport dictionaries where the key is the field and value is the value of the field
 
-        # iterate through fields in current passport
-        for field in passport.keys():
-        
-            # check if field is relevant and if validation of value is required, validates field
-            if field in relevantFields:
-                if validationRequired:
-                    if validateField(field, passport[field]):
-                        numValidated += 1
-                else:
-                    numValidated += 1
-        
-        # if we validated the same amount of fields that are relevant, passport is valid
-        if numValidated == len(relevantFields):
-            output += 1
+    Time Complexity: O(n); where n is the number of passports given
+    Space Complexity: O(n)
+    """
+    passports = []
+    current_passport = {}
+    for line in data:
+        if line != '':
+            for field in line.strip().split(' '):
+                key, val = field.split(':')
+                if key in valid_fields:
+                    current_passport[key] = val
+        else:
+            passports.append(current_passport)
+            current_passport = {}
 
-    return output
+    passports.append(current_passport)  # add last passport
+    return passports
 
-# function to validate a field and it's value
-# returns True if valid, otherwise False
-# time complexity: O(1)
-# space complexity: O(1)
-def validateField(key, val):
+
+def is_valid_passport(passport, validation_required=False, relevant_fields=valid_fields):
+    """Check if a given passport is valid
+
+    Returns True if valid, otherwise returns False
+
+    Time Complexity: O(1) (there can only be at most 8 fields to check for per passport)
+    Space Complexity: O(1)
+    """
+    num_valid = 0
+
+    # iterate through fields in current passport
+    for field in passport.keys():
+
+        # check if field is relevant and if validation of value is required, validates field
+        if field in relevant_fields:
+            if validation_required:
+                if validate_field(field, passport[field]):
+                    num_valid += 1
+            else:
+                num_valid += 1
+
+    # if we validated the same amount of fields that are relevant, passport is valid
+    if num_valid == len(relevant_fields):
+        return True
+
+    return False
+
+
+def validate_field(key, val):
+    """Check if a given field and it's assigned value is valid
+
+    Returns True if valid, otherwise returns False
+
+    Time Complexity: O(1)
+    Space Complexity: O(1)
+    """
     # birth year
     if key == 'byr':
         if len(val) == 4 and val.isdecimal() and int(val) >= 1920 and int(val) <= 2002:
@@ -92,7 +115,7 @@ def validateField(key, val):
                     return True
     # eye color
     elif key == 'ecl':
-        validColors = {
+        valid_colors = {
             'amb',
             'blu',
             'brn',
@@ -101,7 +124,7 @@ def validateField(key, val):
             'hzl',
             'oth'
         }
-        if val in validColors:
+        if val in valid_colors:
             return True
     # passport id
     elif key == 'pid':
@@ -110,11 +133,41 @@ def validateField(key, val):
     # return false by default
     return False
 
-pt1RelevantFields = validFields.copy()
-pt1RelevantFields.remove('cid')
 
-pt2RelevantFields = validFields.copy()
-pt2RelevantFields.remove('cid')
+def solution1(data, valid_fields):
+    """Counts the number of valid passports by checking that they have all required fields"""
+    passports = get_passports_from_data(data)
 
-print(f"Part 1 Solution: {numValidPassports(data, False, pt1RelevantFields)}")
-print(f"Part 2 Solution: {numValidPassports(data, True, pt2RelevantFields)}")
+    relevant_fields = valid_fields.copy()
+    relevant_fields.remove('cid')
+
+    answer = 0
+    for passport in passports:
+        if is_valid_passport(passport, False, relevant_fields):
+            answer += 1
+
+    return answer
+
+
+def solution2(data, valid_fields):
+    """Counts the number of valid passports by checking that they have all required fields AND valid values"""
+    passports = get_passports_from_data(data)
+
+    relevant_fields = valid_fields.copy()
+    relevant_fields.remove('cid')
+
+    answer = 0
+    for passport in passports:
+        if is_valid_passport(passport, True, relevant_fields):
+            answer += 1
+
+    return answer
+
+
+if __name__ == "__main__":
+
+    print(f'Sample 1 Part 1 Solution: {solution1(example1, valid_fields)} should be 2')
+    print(f'Part 1 Solution: {solution1(data, valid_fields)}')
+    print()
+    print(f'Sample 1 Part 2 Solution: {solution2(example1, valid_fields)} should be 2')
+    print(f'Part 2 Solution: {solution2(data, valid_fields)}')

@@ -1,67 +1,99 @@
 # initialize problem variables
 data = []
+example1 = []
+
+# populate sample data from example file(s)
+filename = 'example1.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example1.append(line.strip())
 
 # populate data from input file
 filename = 'input.txt'
-file = open(filename, 'r')
-lines = file.readlines()
-for line in lines:
-    rules, password = line.split(':')
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        data.append(line.strip())
+
+
+def is_valid_password_ver1(x, y, letter, password):
+    """Checks if the password passed in is valid or not according to part 1's rules
+
+    A password is valid if it contains the required letter between x and y number of occurrences (inclusive)
+
+    Time Complexity: O(k); where k is the total number of characters in the password
+    Space Complexity: O(1)
+    """
+    count = 0
+    for char in password:
+        if char == letter:
+            count += 1
+    if count >= x and count <= y:
+        return True
+    return False
+
+
+def is_valid_password_ver2(x, y, letter, password):
+    """Checks if the password passed in is valid or not according to part 2's rules
+
+    A password is valid if only one position x or y is the required letter (XOR)
+    (x and y counts starting with 1, NOT 0)
+
+    Time Complexity: O(1)
+    Space Complexity: O(1)
+    """
+    letterAtX = False
+    letterAtY = False
+
+    if x <= len(password):
+        if password[x-1] == letter:
+            letterAtX = True
+
+    if y <= len(password):
+        if password[y-1] == letter:
+            letterAtY = True
+
+    if letterAtX ^ letterAtY:
+        return True
+    return False
+
+
+def parse_line_in_data(line):
+    rules, password = line.split(': ')
     count, letter = rules.split(' ')
     x, y = count.split('-')
+    return [x, y, letter, password]
 
-    password = password.strip()
 
-    # formatting it as a dictionary/object for easier lookup later
-    data.append({
-        'x': int(x),
-        'y': int(y),
-        'letter': letter,
-        'password': password
-    })
+def solution1(data):
+    answer = 0
+    for line in data:
+        [x, y, letter, password] = parse_line_in_data(line)
+        x = int(x)
+        y = int(y)
+        if is_valid_password_ver1(x, y, letter, password):
+            answer += 1
+    return answer
 
-# function to count how many valid passwords are in data
-# password is valid if the password contains the required letter between x and y number of occurrences inclusive
-# time complexity: O(k); where k is the total number of characters, we gotta count all the characters to know if it's within min/max bounds
-# space complexity: O(n)
-def countValidPasswords1(data):
-    output = 0
-    for item in data:
-        count = 0
-        for char in item['password']:
-            if char == item['letter']:
-                count += 1
-        if count >= item['x'] and count <= item['y']:
-            output += 1
-    return output
 
-print(f'Part 1 Solution: {countValidPasswords1(data)}')
+def solution2(data):
+    answer = 0
+    for line in data:
+        [x, y, letter, password] = parse_line_in_data(line)
+        x = int(x)
+        y = int(y)
+        if is_valid_password_ver2(x, y, letter, password):
+            answer += 1
+    return answer
 
-# function to count how many valid passwords are in data
-# password is valid if the password contains the required letter at exactly one of the positions x or y
-# time complexity: O(n); we're just looking up two characters in each password string so n referring to number of passwords
-# space complexity: O(n)
-def countValidPasswords2(data):
-    output = 0
-    for item in data:
-        x = item['x']
-        y = item['y']
-        password = item['password']
-        letter = item['letter']
 
-        letterAtX = False
-        letterAtY = False
+if __name__ == "__main__":
 
-        if x <= len(password):
-            if password[x-1] == letter:
-                letterAtX = True
-
-        if y <= len(password):
-            if password[y-1] == letter:
-                letterAtY = True
-
-        if letterAtX ^ letterAtY:
-            output += 1
-    return output
-
-print(f'Part 2 Solution: {countValidPasswords2(data)}')
+    print(
+        f'Sample 1 Part 1 Solution: {solution1(example1)} should be 2')
+    print(f'Part 1 Solution: {solution1(data)}')
+    print()
+    print(
+        f'Sample 1 Part 2 Solution: {solution2(example1)} should be 1')
+    print(f'Part 2 Solution: {solution2(data)}')

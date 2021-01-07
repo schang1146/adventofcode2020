@@ -60,6 +60,13 @@ def is_valid_password_ver2(x, y, letter, password):
 
 
 def parse_line_in_data(line):
+    """Parses a line of raw data that contains a password and the rules for that password
+
+    Returns x, y, letter, and password
+
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+    """
     rules, password = line.split(': ')
     count, letter = rules.split(' ')
     x, y = count.split('-')
@@ -67,6 +74,7 @@ def parse_line_in_data(line):
 
 
 def solution1(data):
+    """Counts the number of valid passwords according to part 1's rules"""
     answer = 0
     for line in data:
         [x, y, letter, password] = parse_line_in_data(line)
@@ -78,6 +86,7 @@ def solution1(data):
 
 
 def solution2(data):
+    """Counts the number of valid passwords according to part 2's rules"""
     answer = 0
     for line in data:
         [x, y, letter, password] = parse_line_in_data(line)

@@ -47,10 +47,12 @@ def countTreesEncountered(x, y, terrain):
 
 
 def solution1(data):
+    """Calculates the number of trees encountered for a slope of right 3 and down 1"""
     return countTreesEncountered(3, 1, data)
 
 
 def solution2(data):
+    """Calculates the product of the number of trees hit for different given slopes"""
     a = countTreesEncountered(1, 1, data)
     b = countTreesEncountered(3, 1, data)
     c = countTreesEncountered(5, 1, data)

@@ -1,18 +1,30 @@
 # initialize problem variables
 data = []
+example1 = []
+
+# populate sample data from example file(s)
+filename = 'example1.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example1.append(line.strip())
 
 # populate data from input file
 filename = 'input.txt'
-file = open(filename, 'r')
-lines = file.readlines()
-for line in lines:
-    data.append(line.strip())
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        data.append(line.strip())
 
-# function to find how many trees are in the path given a slope
-# returns number of trees encountered
-# time complexity:
-# space complexity:
+
 def countTreesEncountered(x, y, terrain):
+    """Count trees encountered given a slope
+
+    Returns the number of trees (#) encountered
+
+    Time Complexity: O(n/y) where n is the number of rows in terrain
+    Space Complexity: O(1)
+    """
     # +x => moves right
     # -x => moves left
     # +y => moves down
@@ -33,12 +45,24 @@ def countTreesEncountered(x, y, terrain):
 
     return answer
 
-print(f'Part 1 Solution: {countTreesEncountered(3, 1, data)}')
 
-a = countTreesEncountered(1, 1, data)
-b = countTreesEncountered(3, 1, data)
-c = countTreesEncountered(5, 1, data)
-d = countTreesEncountered(7, 1, data)
-e = countTreesEncountered(1, 2, data)
+def solution1(data):
+    return countTreesEncountered(3, 1, data)
 
-print(f'Part 2 Solution: {a * b * c * d * e}')
+
+def solution2(data):
+    a = countTreesEncountered(1, 1, data)
+    b = countTreesEncountered(3, 1, data)
+    c = countTreesEncountered(5, 1, data)
+    d = countTreesEncountered(7, 1, data)
+    e = countTreesEncountered(1, 2, data)
+    return a * b * c * d * e
+
+
+if __name__ == "__main__":
+
+    print(f'Sample 1 Part 1 Solution: {solution1(example1)} should be 7')
+    print(f'Part 1 Solution: {solution1(data)}')
+    print()
+    print(f'Sample 1 Part 2 Solution: {solution2(example1)} should be 336')
+    print(f'Part 2 Solution: {solution2(data)}')

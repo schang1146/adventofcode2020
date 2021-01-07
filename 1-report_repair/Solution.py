@@ -1,14 +1,14 @@
 # initialize problem variables
 data = []
-example_one = []
+example1 = []
 target = 2020
 
 # populate sample data from example file(s)
-filename = 'example_one.txt'
+filename = 'example1.txt'
 with open(filename, 'r') as file:
     lines = file.readlines()
     for line in lines:
-        example_one.append(int(line.strip()))
+        example1.append(int(line.strip()))
 
 # populate data from input file
 filename = 'input.txt'
@@ -76,9 +76,9 @@ def solution2(data, target):
 if __name__ == "__main__":
 
     print(
-        f'Sample 1 Part 1 Solution: {solution1(example_one, target)} should be 514579')
+        f'Sample 1 Part 1 Solution: {solution1(example1, target)} should be 514579')
     print(f'Part 1 Solution: {solution1(data, target)}')
     print()
     print(
-        f'Sample 1 Part 2 Solution: {solution2(example_one, target)} should be 241861950')
+        f'Sample 1 Part 2 Solution: {solution2(example1, target)} should be 241861950')
     print(f'Part 2 Solution: {solution2(data, target)}')

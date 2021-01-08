@@ -1,23 +1,65 @@
 # initialize problem variables
 data = []
+example1 = []
+
+# populate sample data from example file(s)
+filename = 'example1.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example1.append(line.strip())
 
 # populate data from input file
 filename = 'input.txt'
-file = open(filename, 'r')
-lines = file.readlines()
-for line in lines:
-    data.append(line)
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        data.append(line.strip())
+
+
+def get_unanimous_count(responses):
+    """Counts the number of characters that show up in every response of a group
+
+    Returns the count of unanimous answers
+
+    Time Complexity: O(n) where n is the total number of characters in the response group
+    Space Complexity: O(n)
+    """
+    seen = {}
+    for response in responses:
+        for char in response:
+            if char in seen:
+                seen[char] += 1
+            else:
+                seen[char] = 1
+
+    unanimous_count = 0
+    for char in seen.keys():
+        if seen[char] == len(responses):
+            unanimous_count += 1
+
+    return unanimous_count
+
 
 # function to returns total # of unique answers people said yes to in each group
 # time complexity: TODO
 # space complexity: TODO
-def getUniqueCountPerGroup(responses):
+
+
+def get_unique_count(responses):
+    """Count the number of unique characters in a response group
+
+    Returns a count of the unique characters
+
+    Time Complexity: O(n) where n is the total number of characters in the response group
+    Space Complexity: O(n)
+    """
     seen = set()
-    uniqueCount = 0
+    unique_count = 0
     for response in responses:
-        # newline denotes a new group, so add current uniqueCount and reset seen
+        # newline denotes a new group, so add current unique_count and reset seen
         if response == '\n':
-            uniqueCount += len(seen)
+            unique_count += len(seen)
             seen = set()
         else:
             response = response.strip()
@@ -27,46 +69,53 @@ def getUniqueCountPerGroup(responses):
     # if there was no newline at the end of responses,
     # add the number of elements in seen
     if len(seen) != 0:
-        uniqueCount += len(seen)
+        unique_count += len(seen)
 
-    return uniqueCount
+    return unique_count
 
-# function that returns total # of unique answers everyone in each group said yes to
-# time complexity: TODO
-# space complexity: TODO
-def solution2(responses):
-    seen = {}
-    uniqueCount = 0
-    numberOfPeopleInGroup = 0
-    for response in responses:
-        # newline denotes a new group, so add current uniqueCount and reset seen
-        if response == '\n':
-            for key in seen.keys():
-                # if value for key in seen is equal to the # of people in a group
-                # then everyone said yes to it
-                if seen[key] == numberOfPeopleInGroup:
-                    uniqueCount += 1
-            # reset for next group
-            numberOfPeopleInGroup = 0
-            seen = {}
-        # keep track of total people in a group and their responses
+
+def parse_data(data):
+    """Parses the raw data into a list of response groups
+
+    Returns a list of response groups that contain the responses in each group
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    """
+    response_groups = []
+    current_group = []
+    for line in data:
+        if line == "":
+            response_groups.append(current_group)
+            current_group = []
         else:
-            numberOfPeopleInGroup += 1
-            response = response.strip()
-            for char in response:
-                if char not in seen:
-                    seen[char] = 1
-                else:
-                    seen[char] += 1
-    # if there was no newline at the end of responses,
-    # add the number of elements in seen
-    if len(seen) != 0:
-        for key in seen.keys():
-            if seen[key] == numberOfPeopleInGroup:
-                uniqueCount += 1
-                
-    return uniqueCount
+            current_group.append(line)
+    response_groups.append(current_group)
+    return response_groups
 
-print(f'Part 1 Solution: {getUniqueCountPerGroup(data)}')
 
-print(f'Part 2 Solution: {solution2(data)}')
+def solution1(data):
+    """Sums the number of unique characters that are chosen for each group"""
+    response_groups = parse_data(data)
+    answer = 0
+    for responses in response_groups:
+        answer += get_unique_count(responses)
+    return answer
+
+
+def solution2(data):
+    """Sums the number of characters that are unanimously chosen for each group"""
+    response_groups = parse_data(data)
+    answer = 0
+    for responses in response_groups:
+        answer += get_unanimous_count(responses)
+    return answer
+
+
+if __name__ == "__main__":
+
+    print(f'Sample 1 Part 1 Solution: {solution1(example1)} should be 11')
+    print(f'Part 1 Solution: {solution1(data)}')
+    print()
+    print(f'Sample 1 Part 2 Solution: {solution2(example1)} should be 6')
+    print(f'Part 2 Solution: {solution2(data)}')

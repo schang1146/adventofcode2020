@@ -1,18 +1,39 @@
 # initialize problem variables
 data = []
+example1 = []
+example2 = []
+
+# populate sample data from example file(s)
+filename = 'example1.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example1.append(line.strip())
+filename = 'example2.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        example2.append(line.strip())
 
 # populate data from input file
 filename = 'input.txt'
-file = open(filename, 'r')
-lines = file.readlines()
-for line in lines:
-    data.append(line)
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        data.append(line.strip())
 
-# function that parses the input data and returns a set of containers
-# and a hashmap of the rules
-# time complexity: O(v + e) where v == # of vertices and e = # of edges
-# space complexity: O(v)
+
 def parseData(data):
+    """Parses raw data
+
+    Returns:
+    - containers = set of all of the colors of bags available
+    - rules = dictionary where key is the color of the outer bag and the value is a dictionary of contained bags
+
+    Time Complexity: O(v + e) where v == # of vertices and e == # of edges
+    Space Complexity: O(v)
+    (vertices -> bag colors; edges -> bag container relationships)
+    """
     containers = set()
     rules = {}
     for line in data:
@@ -30,12 +51,16 @@ def parseData(data):
 
     return [containers, rules]
 
-containers, rules = parseData(data)
 
-# function returns the total number of bags that can contain a shiny gold bag
-# time complexity: O(v + e) where v == # of vertices and e = # of edges
-# space complexity: O(v)
-def totalBagsCanContainShinyGoldBag(rules):
+def count_bags_can_contain_shiny_gold_bag(rules):
+    """Count the total number of bags that can contain a shiny gold bag given a set of rules
+
+    Returns the number of bags that can contain a shiny gold bag
+
+    Time Complexity: O(v + e) where v == # of vertices and e == # of edges
+    Space Complexity: O(v)
+    (vertices -> bag colors; edges -> bag container relationships)
+    """
     seen = set()
     stack = [[color] for color in rules.keys()]
     canContainGold = set()
@@ -48,7 +73,7 @@ def totalBagsCanContainShinyGoldBag(rules):
             if color == 'shiny gold':
                 for history in currentPath:
                     canContainGold.add(history)
-            
+
             elif color not in seen:
                 stack.append(currentPath + [color])
 
@@ -59,11 +84,16 @@ def totalBagsCanContainShinyGoldBag(rules):
 
     return len(canContainGold)
 
-# function returns the total # of bags inside the a shiny gold bag if
-# the rules passed in described the # of bags inside each other bag
-# time complexity: O(v + e) where v == # of vertices and e = # of edges
-# space complexity: O(v)
-def totalBagsInShinyGoldBag(rules):
+
+def count_bags_in_shiny_gold_bag(rules):
+    """Count the total number of bags inside one shiny gold bag given a set of rules
+
+    Returns the number of bags inside one shiny gold bag
+
+    Time Complexity: O(v + e) where v == # of vertices and e == # of edges
+    Space Complexity: O(v)
+    (vertices -> bag colors; edges -> bag container relationships)
+    """
     totalBags = 0
     stack = [('shiny gold', 1)]
     while len(stack) > 0:
@@ -76,7 +106,20 @@ def totalBagsInShinyGoldBag(rules):
     return totalBags
 
 
+def solution1(data):
+    containers, rules = parseData(data)
+    return count_bags_can_contain_shiny_gold_bag(rules)
 
-print(f"Part 1 Solution: {totalBagsCanContainShinyGoldBag(rules)}")
 
-print(f"Part 2 Solution: {totalBagsInShinyGoldBag(rules)}")
+def solution2(data):
+    containers, rules = parseData(data)
+    return count_bags_in_shiny_gold_bag(rules)
+
+
+if __name__ == "__main__":
+
+    print(f'Sample 1 Part 1 Solution: {solution1(example1)} should be 4')
+    print(f'Part 1 Solution: {solution1(data)}')
+    print()
+    print(f'Sample 1 Part 2 Solution: {solution2(example2)} should be 126')
+    print(f'Part 2 Solution: {solution2(data)}')
